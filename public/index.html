@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="deprem.rest - Ücretsiz, açık kaynak ve güvenilir deprem bilgisi API'si."
+    />
+    <meta
+      name="keywords"
+      content="earthquake api, turkey earthquakes, real-time data, REST API, deprem, deprem api, deprem verileri, deprem datası, depremler"
+    />
+    <meta name="author" content="deprem.rest" />
+    <title>deprem.rest - Açık kaynak deprem verisi API'si</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css"
+    />
+  </head>
+  <body class="bg-white">
+    <nav
+      id="main-nav"
+      class="fixed w-full top-0 bg-white shadow-sm z-50 border-b border-gray-100"
+    >
+      <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+          <a href="/" class="text-xl font-bold text-gray-900">deprem.rest</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main id="page-content" class="min-h-screen pt-16">
+      <div class="min-h-screen">
+        <!-- Hero Section -->
+        <section class="py-20 px-4 bg-gradient-to-b from-blue-50 to-white">
+          <div class="container mx-auto text-center max-w-4xl">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 text-gray-900">
+              Deprem verileri için basit bir çözüm
+            </h1>
+            <p class="text-xl text-gray-600 mb-8">
+              Ücretsiz ve açık kaynak, USGS verileri tabanlı deprem metadatası
+              servisi.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+              <a
+                href="https://github.com/islemci/deprem.rest"
+                target="_blank"
+                class="bg-gray-900 hover:bg-gray-800 text-white px-8 py-3 rounded-lg transition-colors duration-200 flex items-center"
+              >
+                <svg
+                  class="w-5 h-5 mr-2"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Github'da Görüntüle
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-16">
+          <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+              Özelliklerimiz
+            </h2>
+            <div class="grid md:grid-cols-3 gap-8">
+              <div
+                class="p-6 bg-white rounded-lg shadow-sm border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 text-gray-900">
+                  Gerçek Zamanlı Veri
+                </h3>
+                <p class="text-gray-600">
+                  Bir API anahtarı olmadan tüm verileri ve güncel olayları tek
+                  bir linkten çekebilirsiniz.
+                </p>
+              </div>
+              <div
+                class="p-6 bg-white rounded-lg shadow-sm border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 text-gray-900">
+                  Güvenilir Kaynaklar
+                </h3>
+                <p class="text-gray-600">
+                  Amerikan USGS dairesinin kaynakları ile hazırlanmış, güvenilir
+                  veri paylaşımı yapıyoruz.
+                </p>
+              </div>
+              <div
+                class="p-6 bg-white rounded-lg shadow-sm border border-gray-100"
+              >
+                <div
+                  class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4"
+                >
+                  <svg
+                    class="w-6 h-6 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+                    />
+                  </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-4 text-gray-900">
+                  Geliştiriciler İçin
+                </h3>
+                <p class="text-gray-600">
+                  Basitçe ayrı sistemlere entegre edin. Tek bir JSON dosyası ile
+                  birçok veri.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Start Section -->
+        <section class="py-16 bg-gray-50">
+          <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-900">
+              Hemen Başlayın
+            </h2>
+            <div class="max-w-3xl mx-auto">
+              <div
+                class="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
+              >
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-lg font-semibold text-gray-900">
+                    Son Depremleri Çek
+                  </h3>
+                  <button
+                    class="text-gray-400 hover:text-gray-600"
+                    onclick="copyCode('quickstart-example')"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <pre><code class="language-javascript" id="quickstart-example">fetch('https://deprem.rest/veri/json')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+  });</code></pre>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
+  </body>
+</html>
