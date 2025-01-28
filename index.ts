@@ -8,102 +8,8 @@ const rateLimit = require('express-rate-limit');
 
 let cachedData: { zaman: number; veri: any[] } = { zaman: 0, veri: [] };
 
-const countryMapping: { [key: string]: string } = {
-    "Turkey": "Türkiye",
-    "Greece": "Yunanistan",
-    "Azerbaijan": "Azerbaycan",
-    "Cyprus": "Kıbrıs",
-    "Iraq": "Irak",
-    "Iran": "İran",
-    "Syria": "Suriye",
-    "Armenia": "Ermenistan",
-    "Georgia": "Gürcistan",
-    "Kahramanmaras earthquake sequence": "Kahramanmaraş deprem dizisi",
-    "Turkey-Syria border region": "Türkiye-Suriye sınır bölgesi"
-};
-
-const lokasyonCevir = (location: string) => {
-    const regex = /(\d+)\s+km\s+([A-Z]{1,3})\s+of\s+([^,]+),\s+(.+)/;
-    const match = location.match(regex);
-    if (match) {
-        let yon = match[2];
-        switch (yon) {
-            case 'N':
-                yon = 'K'; // Kuzey
-                break;
-            case 'E':
-                yon = 'D'; // Doğu
-                break;
-            case 'S':
-                yon = 'G'; // Güney
-                break;
-            case 'W':
-                yon = 'B'; // Batı
-                break;
-            case 'NE':
-                yon = 'KD'; // Kuzeydoğu
-                break;
-            case 'SE':
-                yon = 'GD'; // Güneydoğu
-                break;
-            case 'SW':
-                yon = 'GB'; // Güneybatı
-                break;
-            case 'NW':
-                yon = 'KB'; // Kuzeybatı
-                break;
-            case 'NNE':
-                yon = 'KKD'; // Kuzey-Kuzeydoğu
-                break;
-            case 'ENE':
-                yon = 'DKD'; // Doğu-Kuzeydoğu
-                break;
-            case 'ESE':
-                yon = 'DGD'; // Doğu-Güneydoğu
-                break;
-            case 'SSE':
-                yon = 'GGD'; // Güney-Güneydoğu
-                break;
-            case 'SSW':
-                yon = 'GGB'; // Güney-Güneybatı
-                break;
-            case 'WSW':
-                yon = 'BGB'; // Batı-Güneybatı
-                break;
-            case 'WNW':
-                yon = 'BKB'; // Batı-Kuzeybatı
-                break;
-            case 'NNW':
-                yon = 'KKB'; // Kuzey-Kuzeybatı
-                break;
-        }
-        const ulke = countryMapping[match[4].trim()] || match[4].trim();
-        return {
-            yon: yon,
-            uzaklik: parseInt(match[1], 10),
-            sehir: match[3].trim(),
-            ulke: ulke
-        };
-    } else {
-        // Handle cases where the regex does not match
-        const parts = location.split(',');
-        if (parts.length === 2) {
-            const ulke = countryMapping[parts[1].trim()] || parts[1].trim();
-            return {
-                yon: '',
-                uzaklik: 0,
-                sehir: parts[0].trim(),
-                ulke: ulke
-            };
-        } else {
-            return {
-                yon: '',
-                uzaklik: 0,
-                sehir: location,
-                ulke: ''
-            };
-        }
-    }
+const formatDate = (date: Date) => {
+    return date.toISOString().slice(0, 19).replace('T', ' ');
 };
 
 const depremleriCek = async () => {
@@ -112,23 +18,36 @@ const depremleriCek = async () => {
     const minEnlem = 35.0;
     const maxEnlem = 43.0;
 
-    const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2023-01-01&endtime=2023-12-31&minlatitude=${minEnlem}&maxlatitude=${maxEnlem}&minlongitude=${minBoylam}&maxlongitude=${maxBoylam}`;
+    const now = new Date();
+    const fourDaysAgo = new Date(now.getTime() - 4 * 24 * 60 * 60 * 1000);
+    
+    const endDate = formatDate(now);
+    const startDate = formatDate(fourDaysAgo);
+    const url = `https://deprem.afad.gov.tr/apiv2/event/filter?start=${startDate}&end=${endDate}`;
 
     try {
         console.log(chalk.blue(`[${new Date().toISOString()}] Deprem verileri çekiliyor...`));
         console.log(chalk.cyan(`[${new Date().toISOString()}] URL: ${url}`));
         const yanit = await axios.get(url);
-        const depremler = yanit.data.features;
+        const depremler = yanit.data;
         const zaman = Math.floor(Date.now() / 1000);
 
-        // JSON için formatlanmış veri dizisi oluştur
+        // Map the new data structure
         const veri = depremler.map((deprem: any) => ({
-            buyukluk: deprem.properties.mag,
-            lokasyon: lokasyonCevir(deprem.properties.place),
-            zaman: new Date(deprem.properties.time).toISOString(),
-            enlem: deprem.geometry.coordinates[1],
-            boylam: deprem.geometry.coordinates[0],
-            derinlik: deprem.geometry.coordinates[2]
+            rms: deprem.rms,
+            kimlik: deprem.eventID,
+            lokasyon: deprem.location,
+            enlem: deprem.latitude,
+            boylam: deprem.longitude,
+            derinlik: deprem.depth,
+            tip: deprem.type,
+            buyukluk: deprem.magnitude,
+            ulke: deprem.country,
+            il: deprem.province,
+            ilce: deprem.district,
+            mahalle: deprem.neighborhood,
+            tarih: deprem.date,
+            guncelleme: deprem.isEventUpdate,
         }));
 
         const son = {
@@ -170,6 +89,7 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
+app.set('trust proxy', 1 /* number of proxies between user and server */)
 
 app.listen(PORT, () => {
     console.log(chalk.green(`[${new Date().toISOString()}] Sunucu ${PORT} portunda başlatıldı.`));
